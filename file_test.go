@@ -74,7 +74,33 @@ func TestFile_Write(t *testing.T) {
 			},
 			assert: func(got []byte, err error) {
 				r.NoError(err)
-				a.Equal("package unit;\n", string(got))
+				a.Equal(`package unit;
+
+message Message1 {
+  bool Field1 = 1001;
+  repeated string Field2 = 1002;
+}
+
+message Message2 {
+  number Field3 = 1001;
+  string Field4 = 1002;
+}
+
+service Service1 {
+  rpc Method1 () returns ();
+  
+  rpc Method2 () returns ();
+  
+}
+
+service Service2 {
+  rpc Method3 () returns ();
+  
+  rpc Method4 () returns ();
+  
+}
+
+`, string(got))
 			},
 		},
 	}
