@@ -25,7 +25,7 @@ func TestFile_Write(t *testing.T) {
 			},
 			assert: func(got []byte, err error) {
 				r.NoError(err)
-				a.Equal("package unit;\n", string(got))
+				a.Equal("package unit;\n\n", string(got))
 			},
 		},
 		{
