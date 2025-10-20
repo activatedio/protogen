@@ -10,6 +10,7 @@ import (
 // It extends the Renderer interface and provides functionality to add fields to a message.
 type Message interface {
 	protogen.Renderer
+	GetName() string
 	AddFields(...Field) Message
 }
 
@@ -23,6 +24,11 @@ type message struct {
 func (m *message) AddFields(f ...Field) Message {
 	m.fields = append(m.fields, f...)
 	return m
+}
+
+// GetName returns the name of the message.
+func (m *message) GetName() string {
+	return m.name
 }
 
 // Render generates a formatted representation of the message and writes it to the provided Output.
