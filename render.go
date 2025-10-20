@@ -7,7 +7,12 @@ import (
 
 // Output defines an interface for writing lines of text, typically used for structured rendering with error handling.
 type Output interface {
+	// WriteLines writes out individual lines, adding the new line
 	WriteLines(...string) error
+	// StartLine starts a line which can be progressively written
+	StartLine() error
+	// Write writes a value inline
+	Write(string) error
 }
 
 // Renderer defines an interface for rendering structured output into an Output implementation.
@@ -21,6 +26,14 @@ type Renderer interface {
 type indentingOutput struct {
 	delegate Output
 	level    int
+}
+
+func (i *indentingOutput) StartLine() error {
+	return i.delegate.Write(strings.Repeat(" ", i.level))
+}
+
+func (i *indentingOutput) Write(s string) error {
+	return i.delegate.Write(s)
 }
 
 // WriteLines writes the provided lines with added indentation based on the current level and delegates them for output.
@@ -56,12 +69,21 @@ type writerOutput struct {
 	w io.Writer
 }
 
+func (w *writerOutput) StartLine() error {
+	return nil
+}
+
+func (w *writerOutput) Write(s string) error {
+	_, err := w.w.Write([]byte(s))
+	return err
+}
+
 // WriteLines writes each string in the provided slice to the writer, followed by a newline, and returns an error if any occur.
 func (w *writerOutput) WriteLines(s ...string) error {
 	var err error
 
 	for _, l := range s {
-		_, err = w.w.Write([]byte(l))
+		err = w.Write(l)
 		if err != nil {
 			return err
 		}

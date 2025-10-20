@@ -1,11 +1,15 @@
-package protogen
+package proto
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/activatedio/protogen"
+)
 
 // Message represents a composable and renderable structure that can hold and manage multiple Field elements.
 // It extends the Renderer interface and provides functionality to add fields to a message.
 type Message interface {
-	Renderer
+	protogen.Renderer
 	AddFields(...Field) Message
 }
 
@@ -24,7 +28,7 @@ func (m *message) AddFields(f ...Field) Message {
 // Render generates a formatted representation of the message and writes it to the provided Output.
 // It writes each field with proper indentation, utilizing the Output interface for structured rendering.
 // Returns an error if any part of the rendering or writing process fails.
-func (m *message) Render(o Output) error {
+func (m *message) Render(o protogen.Output) error {
 
 	var err error
 
@@ -36,7 +40,7 @@ func (m *message) Render(o Output) error {
 
 	for _, f := range m.fields {
 
-		io := NewIndentingOutput(o, 2)
+		io := protogen.NewIndentingOutput(o, 2)
 		err = f.Render(io)
 		if err != nil {
 			return err

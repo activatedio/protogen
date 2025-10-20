@@ -1,4 +1,2 @@
-// Package protogen contains code to generate proto files
-// It relies on the grammar documented here:
-// https://protobuf.com/docs/language-spec#package-declaration
+// Package protogen contains core code for generation of proto objects
 package protogen

@@ -1,10 +1,14 @@
-package protogen
+package proto
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/activatedio/protogen"
+)
 
 // Service represents an interface that extends Renderer and allows adding RPC methods.
 type Service interface {
-	Renderer
+	protogen.Renderer
 	AddMethods(m ...Method) Service
 }
 
@@ -21,7 +25,7 @@ func (s *service) AddMethods(m ...Method) Service {
 }
 
 // Render generates a structured representation of the service and writes it to the given Output, returning any encountered error.
-func (s *service) Render(o Output) error {
+func (s *service) Render(o protogen.Output) error {
 
 	var err error
 
@@ -32,7 +36,7 @@ func (s *service) Render(o Output) error {
 	}
 
 	for _, m := range s.methods {
-		i := NewIndentingOutput(o, 2)
+		i := protogen.NewIndentingOutput(o, 2)
 		err = m.Render(i)
 		if err != nil {
 			return err
