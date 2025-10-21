@@ -34,10 +34,6 @@ func (m *messageValue) Render(o protogen.Output) error {
 	io := protogen.NewIndentingOutput(o, 2)
 
 	for _, f := range m.fields {
-		err = o.StartLine()
-		if err != nil {
-			return err
-		}
 		err = f.Render(io)
 		if err != nil {
 			return err

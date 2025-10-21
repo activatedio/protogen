@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/activatedio/protogen/tfl"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -84,7 +85,13 @@ package unit;
 						NewMethod("Method1", MethodParams{
 							RequestName:  "Request1",
 							ResponseName: "Response1",
-						}),
+						}).AddOptions(
+							NewOption("option1", NewStringConstant("value1")),
+							NewOption("api.option2", NewMessageValueConstant(tfl.NewMessageValue().AddFields(
+								tfl.NewStringField("f1", "v1").EndSemicolon(),
+								tfl.NewStringField("f2", "v2"),
+							))),
+						),
 						NewMethod("Method2", MethodParams{
 							RequestName:  "Request2",
 							ResponseName: "Response2",
@@ -128,6 +135,11 @@ message Message2 {
 
 service Service1 {
   rpc Method1 (Request1) returns (Response1) {
+    option option1 = "value1";
+    option (api.option2) = {
+      f1: "v1";
+      f2: "v2"
+    };
   }
   rpc Method2 (Request2) returns (Response2) {
   }

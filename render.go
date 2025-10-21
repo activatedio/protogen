@@ -29,6 +29,11 @@ type indentingOutput struct {
 }
 
 func (i *indentingOutput) StartLine() error {
+	// We also need to tell our delegate to start the line for multiple nested indents
+	err := i.delegate.StartLine()
+	if err != nil {
+		return err
+	}
 	return i.delegate.Write(strings.Repeat(" ", i.level))
 }
 

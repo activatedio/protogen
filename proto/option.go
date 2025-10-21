@@ -2,6 +2,7 @@ package proto
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/activatedio/protogen"
 )
@@ -25,7 +26,13 @@ func (o *option) Render(out protogen.Output) error {
 	if err != nil {
 		return err
 	}
-	err = out.Write(fmt.Sprintf("option %s = ", o.name))
+
+	name := o.name
+	if strings.Contains(name, ".") {
+		name = fmt.Sprintf("(%s)", name)
+	}
+
+	err = out.Write(fmt.Sprintf("option %s = ", name))
 	if err != nil {
 		return err
 	}
