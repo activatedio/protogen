@@ -11,13 +11,25 @@ import (
 type Message interface {
 	protogen.Renderer
 	GetName() string
+	SetPackageName(string) Message
+	GetPackageName() string
 	AddFields(...Field) Message
 }
 
 // message represents a struct that defines a named message with a collection of structured fields.
 type message struct {
-	name   string
-	fields []Field
+	name        string
+	packageName string
+	fields      []Field
+}
+
+func (m *message) SetPackageName(s string) Message {
+	m.packageName = s
+	return m
+}
+
+func (m *message) GetPackageName() string {
+	return m.packageName
 }
 
 // AddFields adds one or more Field elements to the message and returns the updated Message instance.

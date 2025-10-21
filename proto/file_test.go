@@ -38,8 +38,15 @@ package unit;
 
 				f := NewFile("unit")
 
+				// include some duplicate ignoring
 				f.AddImports(
 					NewImport("subpath1/path1"),
+				)
+
+				f.AddImports(
+					NewImport("subpath1/path1"),
+					NewImport("subpath2/path2"),
+					// Duplicates are ignored
 					NewImport("subpath2/path2"),
 				).
 					AddOptions(

@@ -87,7 +87,16 @@ func renderElements(output protogen.Output, elements []protogen.Renderer) error 
 
 // AddImports appends one or more Import instances to the file's imports and returns the updated File instance.
 func (f *file) AddImports(i ...Import) File {
-	f.imports = append(f.imports, i...)
+	is := map[string]bool{}
+	for _, _i := range f.imports {
+		is[_i.GetPath()] = true
+	}
+	for _, _i := range i {
+		if !is[_i.GetPath()] {
+			is[_i.GetPath()] = true
+			f.imports = append(f.imports, _i)
+		}
+	}
 	return f
 }
 

@@ -9,10 +9,15 @@ import (
 // Import represents an import in the file
 type Import interface {
 	protogen.Renderer
+	GetPath() string
 }
 
 type importStatement struct {
 	path string
+}
+
+func (i *importStatement) GetPath() string {
+	return i.path
 }
 
 func (i *importStatement) Render(o protogen.Output) error {
