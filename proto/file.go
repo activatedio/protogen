@@ -13,6 +13,18 @@ type File interface {
 	AddOptions(i ...Option) File
 	AddMessages(m ...Message) File
 	AddServices(s ...Service) File
+	// Imports returns the imports the file has accumulated, in
+	// insertion order. The slice is owned by the file; callers must
+	// treat it as read-only.
+	Imports() []Import
+	// Options returns the file-level options in insertion order.
+	Options() []Option
+	// Messages returns the messages added to the file, in insertion
+	// order.
+	Messages() []Message
+	// Services returns the services added to the file, in insertion
+	// order.
+	Services() []Service
 	Write(w io.Writer) error
 }
 
@@ -117,6 +129,11 @@ func (f *file) AddServices(s ...Service) File {
 	f.services = append(f.services, s...)
 	return f
 }
+
+func (f *file) Imports() []Import   { return f.imports }
+func (f *file) Options() []Option   { return f.options }
+func (f *file) Messages() []Message { return f.messages }
+func (f *file) Services() []Service { return f.services }
 
 // NewFile creates a new File instance with the specified package name.
 func NewFile(packageName string) File {
