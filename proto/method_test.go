@@ -56,6 +56,40 @@ func TestMethod_Render(t *testing.T) {
 }
 `,
 		},
+		{
+			name: "client streaming",
+			arrange: func() proto.Method {
+				return proto.NewMethod("method1", proto.MethodParams{
+					RequestName:     "request1",
+					ResponseName:    "response1",
+					ClientStreaming: true,
+				})
+			},
+			expected: "rpc method1 (stream request1) returns (response1) {\n}\n",
+		},
+		{
+			name: "server streaming",
+			arrange: func() proto.Method {
+				return proto.NewMethod("method1", proto.MethodParams{
+					RequestName:     "request1",
+					ResponseName:    "response1",
+					ServerStreaming: true,
+				})
+			},
+			expected: "rpc method1 (request1) returns (stream response1) {\n}\n",
+		},
+		{
+			name: "bidirectional streaming",
+			arrange: func() proto.Method {
+				return proto.NewMethod("method1", proto.MethodParams{
+					RequestName:     "request1",
+					ResponseName:    "response1",
+					ClientStreaming: true,
+					ServerStreaming: true,
+				})
+			},
+			expected: "rpc method1 (stream request1) returns (stream response1) {\n}\n",
+		},
 	}
 
 	for _, tt := range cases {
